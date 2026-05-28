@@ -41,14 +41,9 @@ export async function renderRoute<T extends RenderTarget>(
     }
 
     const scale = target.scale ?? 2;
-    const png = await svgStringToPngBlob(
-      svgString,
-      scene.args.width,
-      scene.args.height,
-      scale,
-    );
+    const png = await svgStringToPngBlob(svgString, scene.args.width, scene.args.height, scale);
     return makeSuccess<T>(scene.summary, target.kind, { png } as never);
   } catch (e) {
-    return makeError(e) as RenderResult<T>;
+    return makeError(e);
   }
 }

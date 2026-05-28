@@ -80,11 +80,7 @@ export function prepareScene(input: SceneInput): Scene {
  * sinks (browser, jsdom+resvg, future canvas/native renderers, ...) need to
  * call when they have a usable `SVGSVGElement` in hand.
  */
-export function drawScene(
-  svg: SVGSVGElement,
-  scene: Scene,
-  options?: DrawSceneOptions,
-): void {
+export function drawScene(svg: SVGSVGElement, scene: Scene, options?: DrawSceneOptions): void {
   renderSketchMapSvg(svg, {
     ...scene.args,
     filterId: options?.filterId ?? scene.args.filterId,
@@ -95,16 +91,10 @@ export function drawScene(
  * Render a `Scene` into a self-contained SVG string. Requires a DOM environment
  * (browser native; headless callers must set up JSDOM globals first).
  */
-export function renderSceneToSvgString(
-  scene: Scene,
-  options?: DrawSceneOptions,
-): string {
-  const svg = document.createElementNS(SVG_NS, "svg") as SVGSVGElement;
+export function renderSceneToSvgString(scene: Scene, options?: DrawSceneOptions): string {
+  const svg = document.createElementNS(SVG_NS, "svg");
   svg.setAttribute("xmlns", SVG_NS);
-  svg.setAttribute(
-    "viewBox",
-    `0 0 ${scene.args.width} ${scene.args.height}`,
-  );
+  svg.setAttribute("viewBox", `0 0 ${scene.args.width} ${scene.args.height}`);
   drawScene(svg, scene, options);
   return new XMLSerializer().serializeToString(svg);
 }

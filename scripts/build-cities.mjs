@@ -63,9 +63,7 @@ function normalizeCityFeature(feature, provinceName) {
 }
 
 async function main() {
-  const provinces = JSON.parse(
-    readFileSync(join(geoDir, "china-provinces.json"), "utf8"),
-  );
+  const provinces = JSON.parse(readFileSync(join(geoDir, "china-provinces.json"), "utf8"));
 
   const cities = [];
 
@@ -78,9 +76,7 @@ async function main() {
     process.stdout.write(`  fetching ${p.properties.name} (${adcode})... `);
     try {
       const fc = await fetchJson(url);
-      const cityFeatures = fc.features.filter(
-        (f) => f.properties.level === targetLevel,
-      );
+      const cityFeatures = fc.features.filter((f) => f.properties.level === targetLevel);
 
       if (cityFeatures.length === 0) {
         throw new Error(`no ${targetLevel} features returned`);
@@ -108,9 +104,7 @@ async function main() {
   writeFileSync(outPath, JSON.stringify(output));
 
   const bytes = readFileSync(outPath).length;
-  console.log(
-    `\nWrote ${outPath}: ${cities.length} cities, ${(bytes / 1024).toFixed(0)} KB`,
-  );
+  console.log(`\nWrote ${outPath}: ${cities.length} cities, ${(bytes / 1024).toFixed(0)} KB`);
 }
 
 main().catch((e) => {

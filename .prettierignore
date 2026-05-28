@@ -1,0 +1,9 @@
+dist/
+node_modules/
+patches/
+coverage/
+pnpm-lock.yaml
+*.tgz
+
+# Bundled large GeoJSON, generated and not meant to be hand-edited.
+src/core/data/

@@ -9,9 +9,7 @@ export interface RenderSummary {
   unmatchedLocations: string[];
 }
 
-export type RenderTarget =
-  | { kind: "svg" }
-  | { kind: "png"; scale?: number };
+export type RenderTarget = { kind: "svg" } | { kind: "png"; scale?: number };
 
 export type RenderStatus = "ok" | "partial" | "error";
 
@@ -41,9 +39,7 @@ export type RenderSuccess<T extends RenderTarget> = T extends { kind: "svg" }
     ? SuccessForPng
     : never;
 
-export type RenderResult<T extends RenderTarget> =
-  | RenderSuccess<T>
-  | RenderError;
+export type RenderResult<T extends RenderTarget> = RenderSuccess<T> | RenderError;
 
 type SuccessPayload<T extends RenderTarget> = T extends { kind: "svg" }
   ? { svg: string }

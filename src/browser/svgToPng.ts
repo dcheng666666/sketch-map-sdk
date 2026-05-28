@@ -1,9 +1,6 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
 
-const EXPORT_FONT_FAMILIES = [
-  "Caveat:wght@400;500;600;700",
-  "ZCOOL KuaiLe",
-];
+const EXPORT_FONT_FAMILIES = ["Caveat:wght@400;500;600;700", "ZCOOL KuaiLe"];
 
 function collectSvgText(svg: SVGSVGElement): string {
   const text = Array.from(svg.querySelectorAll("text"))
@@ -16,8 +13,14 @@ function collectSvgText(svg: SVGSVGElement): string {
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("FileReader returned a non-string result for readAsDataURL"));
+      }
+    };
+    reader.onerror = () => reject(reader.error ?? new Error("FileReader failed"));
     reader.readAsDataURL(blob);
   });
 }
@@ -103,10 +106,7 @@ export async function svgStringToPngBlob(
   try {
     await embedFontsForExport(svg);
   } catch (error) {
-    console.warn(
-      "Could not embed export fonts; falling back to SVG fonts.",
-      error,
-    );
+    console.warn("Could not embed export fonts; falling back to SVG fonts.", error);
   }
 
   const finalSvgString = new XMLSerializer().serializeToString(svg);

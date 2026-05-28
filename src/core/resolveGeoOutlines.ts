@@ -22,9 +22,7 @@ export function resolveGeoOutlines(locations: Location[]): ResolvedGeo {
 
   const cityResults = locations.map((l) => findCityForPoint(l.lat, l.lng));
 
-  const unmatchedLocations = locations
-    .filter((_, i) => !cityResults[i])
-    .map((l) => l.name);
+  const unmatchedLocations = locations.filter((_, i) => !cityResults[i]).map((l) => l.name);
 
   const seenCity = new Set<number>();
   const cities: CityFeature[] = [];

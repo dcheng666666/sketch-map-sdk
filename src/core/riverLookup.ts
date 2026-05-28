@@ -1,9 +1,4 @@
-import type {
-  Feature,
-  FeatureCollection,
-  LineString,
-  MultiLineString,
-} from "geojson";
+import type { Feature, FeatureCollection, LineString, MultiLineString } from "geojson";
 import riversFc from "./data/china-rivers.json" with { type: "json" };
 
 export interface RiverProps {
@@ -21,9 +16,7 @@ export type RiverFeature = Feature<LineString | MultiLineString, RiverProps>;
 
 type RiversCollection = FeatureCollection<LineString | MultiLineString, RiverProps>;
 
-const allRivers: RiverFeature[] = (
-  riversFc as unknown as RiversCollection
-).features as RiverFeature[];
+const allRivers: RiverFeature[] = (riversFc as unknown as RiversCollection).features;
 
 /**
  * Return every river that actually flows through any of the supplied
@@ -32,12 +25,8 @@ const allRivers: RiverFeature[] = (
  * shows 渭河 but suppresses 嘉陵江, since 嘉陵江 happens to share the same
  * province but does not pass through the same city.
  */
-export function findRiversForCities(
-  cityAdcodes: Iterable<number>,
-): RiverFeature[] {
+export function findRiversForCities(cityAdcodes: Iterable<number>): RiverFeature[] {
   const wanted = new Set(cityAdcodes);
   if (wanted.size === 0) return [];
-  return allRivers.filter((r) =>
-    r.properties.cities.some((c) => wanted.has(c)),
-  );
+  return allRivers.filter((r) => r.properties.cities.some((c) => wanted.has(c)));
 }

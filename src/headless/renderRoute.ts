@@ -54,7 +54,14 @@ function withJsdom<T>(fn: () => T): T {
  * `renderRoute` from `@sketch-map/sdk`; the package's `exports` conditions
  * pick this implementation automatically when running under Node.
  * Never throws — failures become `{ status: 'error', message, cause }`.
+ *
+ * The body is fully synchronous in Node (resvg-js is sync), but the function
+ * stays `async` so its signature is byte-for-byte identical to the browser
+ * implementation, which is genuinely async (fetches fonts, awaits image
+ * decode). Keeping the symmetry lets consumers write isomorphic code without
+ * branching on the runtime, so the lint rule is intentionally disabled here.
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function renderRoute<T extends RenderTarget>(
   input: RouteInput,
   target: T,
@@ -97,6 +104,6 @@ export async function renderRoute<T extends RenderTarget>(
     const png = new Blob([bytes], { type: "image/png" });
     return makeSuccess<T>(summary, target.kind, { png } as never);
   } catch (e) {
-    return makeError(e) as RenderResult<T>;
+    return makeError(e);
   }
 }

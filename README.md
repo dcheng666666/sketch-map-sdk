@@ -42,7 +42,7 @@ const result = await renderRoute(
     title: "华东行程",
     locations: [
       { name: "武汉", lat: 30.5928, lng: 114.3055 },
-      { name: "黄山", lat: 30.1340, lng: 118.1700 },
+      { name: "黄山", lat: 30.134, lng: 118.17 },
       { name: "杭州", lat: 30.2741, lng: 120.1551 },
     ],
   },
@@ -80,15 +80,15 @@ import { RouteInputSchema, type RouteInput } from "sketch-map-sdk";
 const input: RouteInput = RouteInputSchema.parse(json);
 ```
 
-| Field              | Required | Constraint                                                            |
-| ------------------ | -------- | --------------------------------------------------------------------- |
-| `locations`        | yes      | 1–50 ordered items (controls route arrows + marker numbers)            |
-| `locations[].name` | yes      | Short label drawn next to the marker                                  |
-| `locations[].lat`  | yes      | -90 to 90, WGS84                                                      |
-| `locations[].lng`  | yes      | -180 to 180, WGS84                                                    |
-| `title`            | no       | Up to 60 chars, drawn at the top                                      |
-| `width`            | no       | 400–2000 px, default 800                                              |
-| `height`           | no       | 300–2000 px, default 600                                              |
+| Field              | Required | Constraint                                                  |
+| ------------------ | -------- | ----------------------------------------------------------- |
+| `locations`        | yes      | 1–50 ordered items (controls route arrows + marker numbers) |
+| `locations[].name` | yes      | Short label drawn next to the marker                        |
+| `locations[].lat`  | yes      | -90 to 90, WGS84                                            |
+| `locations[].lng`  | yes      | -180 to 180, WGS84                                          |
+| `title`            | no       | Up to 60 chars, drawn at the top                            |
+| `width`            | no       | 400–2000 px, default 800                                    |
+| `height`           | no       | 300–2000 px, default 600                                    |
 
 The PNG is rasterized at 2× the SVG viewBox size unless `target.scale` is set.
 

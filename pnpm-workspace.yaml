@@ -1,2 +1,2 @@
 patchedDependencies:
-  '@arethetypeswrong/core@0.18.2': patches/@arethetypeswrong__core@0.18.2.patch
+  "@arethetypeswrong/core@0.18.2": patches/@arethetypeswrong__core@0.18.2.patch

@@ -21,10 +21,7 @@ function mercatorX(lng: number): number {
   return (lng + 180) / 360;
 }
 
-export function computeBBox(
-  locations: Location[],
-  bufferRatio = 0.2,
-): BBox | null {
+export function computeBBox(locations: Location[], bufferRatio = 0.2): BBox | null {
   if (locations.length === 0) return null;
 
   let minLat = Infinity;
@@ -49,23 +46,13 @@ export function computeBBox(
   const latBuf = latSpan * bufferRatio;
   const lngBuf = lngSpan * bufferRatio;
 
-  return [
-    minLng - lngBuf,
-    minLat - latBuf,
-    maxLng + lngBuf,
-    maxLat + latBuf,
-  ];
+  return [minLng - lngBuf, minLat - latBuf, maxLng + lngBuf, maxLat + latBuf];
 }
 
 export function unionBBox(a: BBox | null, b: BBox | null): BBox | null {
   if (!a) return b;
   if (!b) return a;
-  return [
-    Math.min(a[0], b[0]),
-    Math.min(a[1], b[1]),
-    Math.max(a[2], b[2]),
-    Math.max(a[3], b[3]),
-  ];
+  return [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[2], b[2]), Math.max(a[3], b[3])];
 }
 
 export function createProjection(

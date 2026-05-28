@@ -58,12 +58,7 @@ interface LabelBox {
 
 function tryReserveLabel(queue: LabelBox[], box: LabelBox): boolean {
   for (const r of queue) {
-    if (
-      box.x < r.x + r.w &&
-      box.x + box.w > r.x &&
-      box.y < r.y + r.h &&
-      box.y + box.h > r.y
-    ) {
+    if (box.x < r.x + r.w && box.x + box.w > r.x && box.y < r.y + r.h && box.y + box.h > r.y) {
       return false;
     }
   }
@@ -216,18 +211,10 @@ function isPathCommand(token: string): boolean {
 }
 
 function pathTokens(d: string): string[] {
-  return (
-    d.match(/[a-zA-Z]|[-+]?(?:\d*\.\d+|\d+\.?)(?:[eE][-+]?\d+)?/g) ?? []
-  );
+  return d.match(/[a-zA-Z]|[-+]?(?:\d*\.\d+|\d+\.?)(?:[eE][-+]?\d+)?/g) ?? [];
 }
 
-function cubicPoint(
-  p0: Point2D,
-  p1: Point2D,
-  p2: Point2D,
-  p3: Point2D,
-  t: number,
-): Point2D {
+function cubicPoint(p0: Point2D, p1: Point2D, p2: Point2D, p3: Point2D, t: number): Point2D {
   const mt = 1 - t;
   const mt2 = mt * mt;
   const t2 = t * t;
@@ -237,12 +224,7 @@ function cubicPoint(
   };
 }
 
-function quadraticPoint(
-  p0: Point2D,
-  p1: Point2D,
-  p2: Point2D,
-  t: number,
-): Point2D {
+function quadraticPoint(p0: Point2D, p1: Point2D, p2: Point2D, t: number): Point2D {
   const mt = 1 - t;
   return {
     x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
@@ -442,14 +424,9 @@ function drawArrowsOnCurve(
   } = {},
 ) {
   if (points.length < 2) return;
-  const {
-    arrowSize = 12,
-    backLen = 14,
-    minSegment = 25,
-    midT = 0.55,
-  } = options;
+  const { arrowSize = 12, backLen = 14, minSegment = 25, midT = 0.55 } = options;
 
-  const path = curveGroup.querySelector("path") as SVGPathElement | null;
+  const path = curveGroup.querySelector("path");
   if (!path) return;
   const geometry = pathGeometry(path);
   if (!geometry) {
@@ -463,10 +440,7 @@ function drawArrowsOnCurve(
   // expensive nearest-point search per arrow.
   const cum: number[] = [0];
   for (let i = 0; i < points.length - 1; i++) {
-    cum.push(
-      cum[i] +
-        Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y),
-    );
+    cum.push(cum[i] + Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y));
   }
   const totalStraight = cum[cum.length - 1];
   if (totalStraight <= 0) return;
@@ -494,11 +468,7 @@ function drawArrowsOnCurve(
   }
 }
 
-function drawCompass(
-  rc: RoughSVG,
-  svg: SVGSVGElement,
-  colors: ThemeColors,
-) {
+function drawCompass(rc: RoughSVG, svg: SVGSVGElement, colors: ThemeColors) {
   const cx = canvasW - 54;
   const cy = 56;
   const r = 18; // half of the circle diameter below
@@ -548,10 +518,7 @@ function drawCompass(
   });
 }
 
-function projectRing(
-  ring: number[][],
-  project: ProjectionContext["project"],
-): [number, number][] {
+function projectRing(ring: number[][], project: ProjectionContext["project"]): [number, number][] {
   return ring.map(([lng, lat]) => {
     const p = project(lat, lng);
     return [p.x, p.y];
@@ -571,10 +538,7 @@ function drawPolygonFeature(
   style: PolygonStyle,
 ) {
   const geom = feature.geometry;
-  const polygons: number[][][][] =
-    geom.type === "Polygon"
-      ? [geom.coordinates as number[][][]]
-      : (geom.coordinates as number[][][][]);
+  const polygons: number[][][][] = geom.type === "Polygon" ? [geom.coordinates] : geom.coordinates;
 
   for (const poly of polygons) {
     const outer = poly[0];
@@ -610,10 +574,7 @@ function drawPolygonFeature(
   }
 }
 
-function featureLabelPoint(
-  feature: AreaFeature,
-  proj: ProjectionContext,
-): Point2D | null {
+function featureLabelPoint(feature: AreaFeature, proj: ProjectionContext): Point2D | null {
   const c = feature.properties.centroid ?? feature.properties.center;
   if (!c) return null;
   return proj.project(c[1], c[0]);
@@ -632,8 +593,8 @@ function projectRiverSegments(
 ): Point2D[][] {
   const rawSegs: number[][][] =
     feature.geometry.type === "LineString"
-      ? [feature.geometry.coordinates as number[][]]
-      : (feature.geometry.coordinates as number[][][]);
+      ? [feature.geometry.coordinates]
+      : feature.geometry.coordinates;
 
   const out: Point2D[][] = [];
   for (const seg of rawSegs) {
@@ -648,9 +609,7 @@ function projectRiverSegments(
 
     for (const sub of subSegs) {
       if (sub.length < 2) continue;
-      out.push(
-        sub.map(([lng, lat]: [number, number]) => proj.project(lat, lng)),
-      );
+      out.push(sub.map(([lng, lat]: [number, number]) => proj.project(lat, lng)));
     }
   }
   return out;
@@ -670,10 +629,7 @@ function polylineLength(pts: Point2D[]): number {
 
 /** Find the on-polyline point at `frac` (0..1) of total length, along with
  *  the local tangent angle in radians — used to orient river name labels. */
-function pointAlong(
-  pts: Point2D[],
-  frac: number,
-): { point: Point2D; angle: number } | null {
+function pointAlong(pts: Point2D[], frac: number): { point: Point2D; angle: number } | null {
   if (pts.length < 2) return null;
   const total = polylineLength(pts);
   if (total < 1e-3) return null;
@@ -720,9 +676,7 @@ function drawRivers(
 
   // Group: rank 1 first (drawn under), then rank 2 on top so tributaries are
   // not buried by main-stem strokes that share start/end points.
-  const ordered = [...rivers].sort(
-    (a, b) => a.properties.rank - b.properties.rank,
-  );
+  const ordered = [...rivers].sort((a, b) => a.properties.rank - b.properties.rank);
 
   for (const river of ordered) {
     const segs = projectRiverSegments(river, proj, provinceMask);
@@ -804,31 +758,19 @@ function drawRivers(
       continue;
     }
 
-    appendText(
-      svg,
-      labelInfo.point.x,
-      labelInfo.point.y - (isMain ? 6 : 4),
-      name,
-      inkColor,
-      size,
-      {
-        anchor: "middle",
-        halo: true,
-        haloColor: colors.paper,
-        family: FONT_HAND,
-        weight: isMain ? 700 : 600,
-        rotate: angleDeg,
-        opacity: isMain ? 0.95 : 0.8,
-      },
-    );
+    appendText(svg, labelInfo.point.x, labelInfo.point.y - (isMain ? 6 : 4), name, inkColor, size, {
+      anchor: "middle",
+      halo: true,
+      haloColor: colors.paper,
+      family: FONT_HAND,
+      weight: isMain ? 700 : 600,
+      rotate: angleDeg,
+      opacity: isMain ? 0.95 : 0.8,
+    });
   }
 }
 
-function appendWatercolorDefs(
-  svg: SVGSVGElement,
-  colors: ThemeColors,
-  filterId: string,
-) {
+function appendWatercolorDefs(svg: SVGSVGElement, colors: ThemeColors, filterId: string) {
   const wc = colors.watercolor;
   const defs = document.createElementNS(SVG_NS, "defs");
   defs.innerHTML = `
@@ -867,11 +809,7 @@ function appendWatercolorDefs(
   svg.appendChild(defs);
 }
 
-function paintWatercolorPaper(
-  svg: SVGSVGElement,
-  colors: ThemeColors,
-  filterId: string,
-) {
+function paintWatercolorPaper(svg: SVGSVGElement, colors: ThemeColors, filterId: string) {
   const wc = colors.watercolor;
 
   const bg = document.createElementNS(SVG_NS, "rect");
@@ -921,9 +859,7 @@ function buildStopClusterKeys(points: Point2D[], collisionPx: number): string[] 
   const clusters: { key: string; point: Point2D }[] = [];
 
   for (const p of points) {
-    const hit = clusters.find(
-      (c) => Math.hypot(c.point.x - p.x, c.point.y - p.y) < collisionPx,
-    );
+    const hit = clusters.find((c) => Math.hypot(c.point.x - p.x, c.point.y - p.y) < collisionPx);
     if (hit) {
       keys.push(hit.key);
     } else {
@@ -986,11 +922,7 @@ function verticalArcSide(p0: Point2D, p1: Point2D, arcSide: BidirectionalArcSide
 }
 
 /** Quadratic control point above or below the straight chord on screen. */
-function arcControlPoint(
-  p0: Point2D,
-  p1: Point2D,
-  arcSide: BidirectionalArcSide,
-): Point2D {
+function arcControlPoint(p0: Point2D, p1: Point2D, arcSide: BidirectionalArcSide): Point2D {
   const mx = (p0.x + p1.x) / 2;
   const my = (p0.y + p1.y) / 2;
   const dx = p1.x - p0.x;
@@ -1004,11 +936,7 @@ function arcControlPoint(
 }
 
 /** Shorten a leg slightly so two arcs do not fully overlap at shared stops. */
-function trimSegmentEndpoints(
-  p0: Point2D,
-  p1: Point2D,
-  trimPx = 10,
-): [Point2D, Point2D] {
+function trimSegmentEndpoints(p0: Point2D, p1: Point2D, trimPx = 10): [Point2D, Point2D] {
   const dx = p1.x - p0.x;
   const dy = p1.y - p0.y;
   const len = Math.hypot(dx, dy) || 1;
@@ -1030,7 +958,7 @@ function drawArrowOnPathElement(
   midT = 0.55,
   endpoints?: { from: Point2D; to: Point2D },
 ) {
-  const path = curveGroup.querySelector("path") as SVGPathElement | null;
+  const path = curveGroup.querySelector("path");
   if (!path) return;
 
   const geometry = pathGeometry(path);
@@ -1153,12 +1081,7 @@ function appendRouteWashPath(
   svg.appendChild(washGroup);
 }
 
-function appendRouteShadowPath(
-  rc: RoughSVG,
-  svg: SVGSVGElement,
-  stroke: string,
-  d: string,
-): void {
+function appendRouteShadowPath(rc: RoughSVG, svg: SVGSVGElement, stroke: string, d: string): void {
   const shadow = rc.path(d, {
     stroke,
     strokeWidth: 0.8,
@@ -1241,10 +1164,7 @@ function drawWatercolorRoute(
   if (points.length < 2) return;
   const rc = rough.svg(svg);
   const MARKER_D = 26;
-  const bidirectional = detectBidirectionalSegmentOffsets(
-    points,
-    MARKER_D * 0.6,
-  );
+  const bidirectional = detectBidirectionalSegmentOffsets(points, MARKER_D * 0.6);
 
   let chainStart = 0;
   for (let i = 0; i < points.length - 1; i++) {
@@ -1254,40 +1174,15 @@ function drawWatercolorRoute(
     // Draw any plain legs before this arc without including the arc endpoints
     // in one spline (that would collapse outbound + return into one chord).
     if (i > chainStart) {
-      appendRouteCurve(
-        rc,
-        svg,
-        points.slice(chainStart, i + 1),
-        colors,
-        filterId,
-        roughness,
-        2,
-      );
+      appendRouteCurve(rc, svg, points.slice(chainStart, i + 1), colors, filterId, roughness, 2);
     }
 
-    appendBidirectionalLeg(
-      rc,
-      svg,
-      points[i],
-      points[i + 1],
-      side,
-      colors,
-      filterId,
-      roughness,
-    );
+    appendBidirectionalLeg(rc, svg, points[i], points[i + 1], side, colors, filterId, roughness);
     chainStart = i + 1;
   }
 
   if (chainStart < points.length - 1) {
-    appendRouteCurve(
-      rc,
-      svg,
-      points.slice(chainStart),
-      colors,
-      filterId,
-      roughness,
-      2,
-    );
+    appendRouteCurve(rc, svg, points.slice(chainStart), colors, filterId, roughness, 2);
   }
 }
 
@@ -1372,11 +1267,7 @@ function drawWatercolorMarkers(
   }
 }
 
-function drawWatercolorTitle(
-  svg: SVGSVGElement,
-  title: string,
-  colors: ThemeColors,
-) {
+function drawWatercolorTitle(svg: SVGSVGElement, title: string, colors: ThemeColors) {
   if (!title.trim()) return;
   const wc = colors.watercolor;
   const titleX = 36;
@@ -1405,10 +1296,7 @@ function drawWatercolorTitle(
 }
 
 /** Clear and redraw the sketch map into an existing SVG element. */
-export function renderSketchMapSvg(
-  svg: SVGSVGElement,
-  args: RenderSketchMapArgs,
-): void {
+export function renderSketchMapSvg(svg: SVGSVGElement, args: RenderSketchMapArgs): void {
   const {
     locations,
     cities,
@@ -1433,15 +1321,9 @@ export function renderSketchMapSvg(
   paintWatercolorPaper(svg, colors, filterId);
 
   if (locations.length === 0) {
-    appendText(
-      svg,
-      canvasW / 2,
-      canvasH / 2,
-      "Add places to draw your map",
-      colors.text,
-      22,
-      { anchor: "middle" },
-    );
+    appendText(svg, canvasW / 2, canvasH / 2, "Add places to draw your map", colors.text, 22, {
+      anchor: "middle",
+    });
     return;
   }
 
@@ -1466,16 +1348,7 @@ export function renderSketchMapSvg(
 
   const provinceMask = provinces.length > 0 ? indexPolygons(provinces) : null;
   const riverLabels: LabelBox[] = [];
-  drawRivers(
-    rc,
-    svg,
-    rivers,
-    proj,
-    colors,
-    roughness,
-    provinceMask,
-    riverLabels,
-  );
+  drawRivers(rc, svg, rivers, proj, colors, roughness, provinceMask, riverLabels);
 
   for (const city of cities) {
     drawPolygonFeature(rc, svg, city, proj, roughness, {
@@ -1499,7 +1372,7 @@ export function renderSketchMapSvg(
   for (const province of provinces) {
     const pname = province.properties.name;
     if (cityNames.has(pname)) continue;
-    const p = featureLabelPoint(province as AreaFeature, proj);
+    const p = featureLabelPoint(province, proj);
     if (!p) continue;
     appendText(svg, p.x, p.y - 22, pname, colors.text, 22, {
       anchor: "middle",
@@ -1513,7 +1386,7 @@ export function renderSketchMapSvg(
 
   for (const city of cities) {
     if (skipCityName.has(city.properties.name)) continue;
-    const p = featureLabelPoint(city as AreaFeature, proj);
+    const p = featureLabelPoint(city, proj);
     if (!p) continue;
     appendText(svg, p.x, p.y, city.properties.name, colors.text, 18, {
       anchor: "middle",

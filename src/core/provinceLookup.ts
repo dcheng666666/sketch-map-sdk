@@ -15,7 +15,7 @@ type ProvincesCollection = FeatureCollection<Polygon | MultiPolygon, ProvincePro
 
 const byName = new Map<string, ProvinceFeature>();
 for (const f of (provincesFc as unknown as ProvincesCollection).features) {
-  byName.set(f.properties.name, f as ProvinceFeature);
+  byName.set(f.properties.name, f);
 }
 
 export function findProvinceByName(name: string): ProvinceFeature | null {

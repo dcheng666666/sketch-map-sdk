@@ -22,17 +22,14 @@ interface IndexedCity {
 
 type CitiesCollection = FeatureCollection<Polygon | MultiPolygon, CityProps>;
 
-const indexedCities: IndexedCity[] = (
-  citiesFc as unknown as CitiesCollection
-).features.map((feature) => ({
-  feature: feature as CityFeature,
-  bbox: bbox(feature) as [number, number, number, number],
-}));
+const indexedCities: IndexedCity[] = (citiesFc as unknown as CitiesCollection).features.map(
+  (feature) => ({
+    feature: feature,
+    bbox: bbox(feature) as [number, number, number, number],
+  }),
+);
 
-export function findCityForPoint(
-  lat: number,
-  lng: number,
-): CityFeature | null {
+export function findCityForPoint(lat: number, lng: number): CityFeature | null {
   const pt = point([lng, lat]);
   for (const c of indexedCities) {
     const [minLng, minLat, maxLng, maxLat] = c.bbox;
