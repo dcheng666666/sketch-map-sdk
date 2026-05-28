@@ -25,7 +25,7 @@ pnpm add sketch-map-sdk
 
 Peer requirements:
 
-- Node.js 18+ (for the headless runtime)
+- Node.js 20+ (for the headless runtime)
 - A bundler that respects the `exports` field (Vite, webpack, esbuild, Rollup,
   Next.js, etc.) for the browser runtime
 
