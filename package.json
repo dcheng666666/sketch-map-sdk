@@ -67,8 +67,20 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "changeset publish",
+    "size": "size-limit",
+    "size:why": "size-limit --why",
     "prepublishOnly": "npm run build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,yml,yaml,json,toml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
@@ -84,15 +96,21 @@
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
+    "@size-limit/preset-small-lib": "^12.1.0",
     "@turf/simplify": "^7.3.5",
     "@types/geojson": "^7946.0.16",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.12.3",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-boundaries": "^5.0.1",
+    "eslint-plugin-import-x": "^4.16.1",
     "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
     "prettier": "^3.8.3",
     "publint": "^0.3.21",
+    "size-limit": "^12.1.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.60.0"
   }

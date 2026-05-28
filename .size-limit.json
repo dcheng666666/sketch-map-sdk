@@ -1,0 +1,16 @@
+[
+  {
+    "name": "browser entry (esm, gzip)",
+    "path": "dist/browser.js",
+    "import": "{ renderRoute, RouteInputSchema }",
+    "limit": "850 KB",
+    "gzip": true
+  },
+  {
+    "name": "browser entry (esm, brotli)",
+    "path": "dist/browser.js",
+    "import": "{ renderRoute, RouteInputSchema }",
+    "limit": "575 KB",
+    "brotli": true
+  }
+]

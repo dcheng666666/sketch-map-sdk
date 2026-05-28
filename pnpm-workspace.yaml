@@ -1,2 +1,18 @@
 patchedDependencies:
   "@arethetypeswrong/core@0.18.2": patches/@arethetypeswrong__core@0.18.2.patch
+
+# pnpm v10 sandboxes lifecycle scripts by default. Allowlist only the
+# native-binary downloaders that size-limit (via esbuild) needs, so an
+# install never silently skips them.
+onlyBuiltDependencies:
+  - esbuild
+
+# Transitive-dependency overrides for supply-chain fixes. Audit failures
+# fixed here MUST list the advisory link in the commit message so future
+# maintainers can re-evaluate when the upstream chain catches up.
+overrides:
+  # eslint-plugin-boundaries -> @boundaries/elements pulls handlebars
+  # <=4.7.8 which has multiple injection / DoS advisories
+  # (GHSA-2w6w-674q-4c4q critical, plus 4 high). 4.7.9 patches all of
+  # them and is API-compatible.
+  handlebars: ">=4.7.9"
