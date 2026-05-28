@@ -64,6 +64,9 @@
     "format:check": "prettier --check .",
     "audit": "pnpm audit --audit-level=high",
     "pack:check": "npm pack --dry-run",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf dist"
   },
@@ -78,6 +81,8 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.0",
     "@eslint/js": "^10.0.1",
     "@turf/simplify": "^7.3.5",
     "@types/geojson": "^7946.0.16",

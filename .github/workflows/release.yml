@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write # changesets/action needs to push the "Version Packages" PR branch and tags
+  pull-requests: write # ...and to open/update that PR
+  id-token: write # required by npm publish --provenance (GitHub OIDC)
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    # Skip on commits authored by the changesets bot itself or on forks.
+    if: github.repository == 'dcheng666666/sketch-map-sdk'
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # changesets/action runs in two modes depending on the state of main:
+      #
+      # 1. If there are unconsumed changeset files under .changeset/, it
+      #    opens (or updates) a single "Version Packages" PR that bumps
+      #    package.json and prepends CHANGELOG.md entries. That PR's CI
+      #    is the normal ci.yml; merging it triggers mode 2.
+      #
+      # 2. If there are no unconsumed changeset files but package.json
+      #    version is ahead of the latest npm release, it runs the
+      #    `publish` command (`changeset publish`), which calls
+      #    `npm publish`. The package's prepublishOnly hook runs the
+      #    build, so dist/ is always fresh.
+      - name: Create Release PR or Publish to npm
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          version: pnpm version
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # NPM_CONFIG_PROVENANCE makes `npm publish` attach a provenance
+          # statement signed by GitHub's OIDC issuer, so npmjs.com shows
+          # a verified build-source badge on the published version.
+          NPM_CONFIG_PROVENANCE: "true"

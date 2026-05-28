@@ -119,14 +119,35 @@ git push -u origin main
 
 ## Publish to npm
 
+Releases are driven by [changesets](https://github.com/changesets/changesets)
+and automated by `.github/workflows/release.yml`. The typical flow is:
+
+1. Add a changeset when opening a PR that should ship a new version:
+
+   ```bash
+   pnpm changeset           # interactive: pick bump level + describe the change
+   git add .changeset/
+   ```
+
+2. Merge the PR to `main`. The release workflow opens (or updates) a
+   single "Version Packages" PR that bumps `package.json` and prepends
+   `CHANGELOG.md`.
+
+3. Merge that "Version Packages" PR. The workflow then publishes the new
+   version to npm with [build provenance](https://docs.npmjs.com/generating-provenance-statements)
+   (`npm publish --provenance`) and tags the commit.
+
+The first `0.1.0` release is published manually (one-time bootstrap):
+
 ```bash
-npm login                  # one-time per machine; OTP/2FA required
-npm version patch          # or `minor` / `major`; bumps version + creates a git tag
-npm publish                # publishConfig.access=public (unscoped package)
-git push --follow-tags
+npm login                       # OTP/2FA required
+npm publish --provenance        # publishConfig.access=public (unscoped package)
+git tag v0.1.0 && git push --follow-tags
 ```
 
-`prepublishOnly` runs `npm run build` automatically, so the published tarball always contains a fresh `dist/` (including the bundled geo JSON under `dist/core/data/`).
+`prepublishOnly` runs `npm run build` automatically, so the published
+tarball always contains a fresh `dist/` (including the bundled geo JSON
+under `dist/core/data/`).
 
 ### Verify after publish
 
@@ -134,3 +155,12 @@ git push --follow-tags
 npm view sketch-map-sdk
 npm pack --dry-run         # local inspection of what would be uploaded
 ```
+
+### Required GitHub repository secrets
+
+The release workflow needs one secret to be set under
+**Settings → Secrets and variables → Actions**:
+
+- `NPM_TOKEN` — an [automation token](https://docs.npmjs.com/creating-and-viewing-access-tokens)
+  with `publish` rights on `sketch-map-sdk`. Provenance is signed via
+  GitHub's OIDC issuer (no extra secret needed).
