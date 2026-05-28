@@ -1,8 +1,10 @@
 name: Release
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
     branches: [main]
+    types: [completed]
 
 permissions:
   contents: write # changesets/action needs to push the "Version Packages" PR branch and tags
@@ -17,11 +19,14 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     # Skip on commits authored by the changesets bot itself or on forks.
-    if: github.repository == 'dcheng666666/sketch-map-sdk'
+    if: |
+      github.repository == 'dcheng666666/sketch-map-sdk' &&
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout (full history)
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
       - name: Setup pnpm
