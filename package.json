@@ -61,6 +61,7 @@
     "lint:types": "attw --pack . --ignore-rules cjs-resolves-to-esm",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "audit": "pnpm audit --audit-level=high",
     "pack:check": "npm pack --dry-run",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf dist"

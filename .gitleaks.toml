@@ -1,0 +1,20 @@
+# Gitleaks configuration for sketch-map-sdk.
+# Extends the default rule set; tightening or adding custom rules later
+# is done by appending [[rules]] blocks below the [extend] stanza.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Project-wide allowlist for files that are known-safe but generate noise"
+paths = [
+  # Large bundled GeoJSON: pure geometry, no credentials.
+  '''src/core/data/.*\.json''',
+  # Lockfile: integrity hashes routinely trip generic high-entropy rules.
+  '''pnpm-lock\.yaml''',
+  # Vendored dependency patches: upstream code only.
+  '''patches/.*''',
+  # Build output / packed tarballs.
+  '''dist/.*''',
+  '''.*\.tgz''',
+]
