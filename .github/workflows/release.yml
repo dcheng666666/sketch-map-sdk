@@ -30,9 +30,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Trusted Publishing (OIDC) requires Node >= 22.14.0
+          node-version: 22.14.0
           cache: pnpm
           registry-url: "https://registry.npmjs.org"
+
+      - name: Ensure npm CLI supports OIDC
+        run: |
+          npm i -g npm@11.5.1
+          npm -v
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -58,7 +64,6 @@ jobs:
           title: "chore(release): version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           # NPM_CONFIG_PROVENANCE makes `npm publish` attach a provenance
           # statement signed by GitHub's OIDC issuer, so npmjs.com shows
           # a verified build-source badge on the published version.
