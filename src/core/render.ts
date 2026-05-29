@@ -1282,11 +1282,16 @@ function drawWatercolorTitle(svg: SVGSVGElement, title: string, colors: ThemeCol
 
   // Match the hand-drawn accent to the actual rendered title width.
   const underline = document.createElementNS(SVG_NS, "line");
-  const underlineX = titleX + 2;
   const titleWidth = measureTextWidth(titleEl, title, titleSize);
+  // Keep a hand-drawn look by making the underline slightly shorter than the
+  // rendered text width. Full-width lines tend to overhang, especially with
+  // cursive fonts and CJK fallback glyph metrics.
+  const startInset = Math.min(8, Math.max(3, titleSize * 0.2));
+  const underlineX = titleX + startInset;
+  const underlineWidth = Math.max(24, titleWidth * 0.65);
   underline.setAttribute("x1", String(underlineX));
   underline.setAttribute("y1", "66");
-  underline.setAttribute("x2", String(underlineX + titleWidth));
+  underline.setAttribute("x2", String(underlineX + underlineWidth));
   underline.setAttribute("y2", "69");
   underline.setAttribute("stroke", wc.routeInk);
   underline.setAttribute("stroke-width", "2.4");
