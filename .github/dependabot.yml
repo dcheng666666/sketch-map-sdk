@@ -10,8 +10,6 @@ updates:
       time: "09:00"
       timezone: "Asia/Shanghai"
     open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
     commit-message:
       prefix: "build"
       prefix-development: "build(dev)"
@@ -39,9 +37,6 @@ updates:
       time: "09:00"
       timezone: "Asia/Shanghai"
     open-pull-requests-limit: 3
-    labels:
-      - "dependencies"
-      - "github-actions"
     commit-message:
       prefix: "ci"
       include: "scope"
