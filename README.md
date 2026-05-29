@@ -21,7 +21,7 @@ extra fetch/setup is needed at runtime.
 
 ## Try it live
 
-Use **[sketch-map-app on GitHub Pages](https://dcheng666666.github.io/sketch-map-app/)** for an interactive demo (search places, reorder stops, preview, export PNG) built on this SDK. Source: [`sketch-map-app`](https://github.com/dcheng666666/sketch-map-app). Add **`#sample`** to the URL to load a bundled example route.
+Use the **[sketch-map-app live demo](https://dcheng666666.github.io/sketch-map-app/)** for an interactive experience (search places, reorder stops, preview, export PNG) built on this SDK. Source: **[sketch-map-app](https://github.com/dcheng666666/sketch-map-app)**. Open **[bundled sample route](https://dcheng666666.github.io/sketch-map-app/#sample)** to load an example without searching.
 
 ## Install
 
