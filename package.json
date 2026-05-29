@@ -88,7 +88,7 @@
     "@turf/bbox": "^7.3.5",
     "@turf/boolean-point-in-polygon": "^7.3.5",
     "@turf/helpers": "^7.3.5",
-    "jsdom": "^26.1.0",
+    "jsdom": "^29.1.1",
     "roughjs": "^4.6.6",
     "zod": "^3.25.76"
   },
