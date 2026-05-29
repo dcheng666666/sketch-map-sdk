@@ -1,5 +1,11 @@
 # sketch-map-sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- Shorten the rendered title underline to better match hand-drawn title text.
+
 All notable changes to this project are documented here. The format
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
