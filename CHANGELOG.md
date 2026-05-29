@@ -6,6 +6,12 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 From 0.1.1 onward, entries below are generated automatically by
 [changesets](https://github.com/changesets/changesets).
 
+## 0.1.1
+
+### Patch Changes
+
+- Update dev and runtime dependencies (including `eslint-plugin-boundaries`, `jsdom`, and `zod`) for improved compatibility and security.
+
 ## 0.1.0
 
 ### Initial release
