@@ -1,8 +1,12 @@
 # sketch-map-sdk
 
+[![CI](https://github.com/dcheng666666/sketch-map-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/dcheng666666/sketch-map-sdk/actions/workflows/ci.yml)
+
 Hand-drawn / watercolor-style travel-route map renderer for China. Same API works
 in the **browser** and in **Node.js** (headless via `jsdom` + `@resvg/resvg-js`);
 the runtime is selected automatically through the package's `exports` conditions.
+
+![Example hand-drawn route map](./hand-drawn-map.png)
 
 The renderer takes an ordered list of WGS84 lat/lng locations and produces:
 
@@ -107,60 +111,3 @@ pnpm install
 pnpm build         # tsc + copy src/core/data/*.json to dist/core/data/
 npm pack --dry-run # inspect tarball contents
 ```
-
-## First-time GitHub setup
-
-```bash
-git add .
-git commit -m "Initial commit: sketch-map-sdk extracted from map-test monorepo"
-git remote add origin git@github.com:dcheng666666/sketch-map-sdk.git
-git push -u origin main
-```
-
-## Publish to npm
-
-Releases are driven by [changesets](https://github.com/changesets/changesets)
-and automated by `.github/workflows/release.yml`. The typical flow is:
-
-1. Add a changeset when opening a PR that should ship a new version:
-
-   ```bash
-   pnpm changeset           # interactive: pick bump level + describe the change
-   git add .changeset/
-   ```
-
-2. Merge the PR to `main`. The release workflow opens (or updates) a
-   single "Version Packages" PR that bumps `package.json` and prepends
-   `CHANGELOG.md`.
-
-3. Merge that "Version Packages" PR. The workflow then publishes the new
-   version to npm with [build provenance](https://docs.npmjs.com/generating-provenance-statements)
-   (`npm publish --provenance`) and tags the commit.
-
-The first `0.1.0` release is published manually (one-time bootstrap):
-
-```bash
-npm login                       # OTP/2FA required
-npm publish --provenance        # publishConfig.access=public (unscoped package)
-git tag v0.1.0 && git push --follow-tags
-```
-
-`prepublishOnly` runs `npm run build` automatically, so the published
-tarball always contains a fresh `dist/` (including the bundled geo JSON
-under `dist/core/data/`).
-
-### Verify after publish
-
-```bash
-npm view sketch-map-sdk
-npm pack --dry-run         # local inspection of what would be uploaded
-```
-
-### Required GitHub repository secrets
-
-The release workflow needs one secret to be set under
-**Settings → Secrets and variables → Actions**:
-
-- `NPM_TOKEN` — an [automation token](https://docs.npmjs.com/creating-and-viewing-access-tokens)
-  with `publish` rights on `sketch-map-sdk`. Provenance is signed via
-  GitHub's OIDC issuer (no extra secret needed).

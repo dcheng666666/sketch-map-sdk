@@ -5,6 +5,8 @@
 ### Patch Changes
 
 - Shorten the rendered title underline to better match hand-drawn title text.
+- Add README CI status and example route map image.
+- Remove one-time repository setup and publishing notes from the README.
 
 All notable changes to this project are documented here. The format
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
