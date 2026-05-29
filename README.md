@@ -19,6 +19,10 @@ The renderer takes an ordered list of WGS84 lat/lng locations and produces:
 China geo data (provinces / cities / rivers) is bundled inside the package, so no
 extra fetch/setup is needed at runtime.
 
+## Try it live
+
+Use **[sketch-map-app on GitHub Pages](https://dcheng666666.github.io/sketch-map-app/)** for an interactive demo (search places, reorder stops, preview, export PNG) built on this SDK. Source: [`sketch-map-app`](https://github.com/dcheng666666/sketch-map-app). Add **`#sample`** to the URL to load a bundled example route.
+
 ## Install
 
 ```bash
