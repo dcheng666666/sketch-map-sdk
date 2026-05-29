@@ -10,6 +10,7 @@ permissions:
   contents: write # changesets/action needs to push the "Version Packages" PR branch and tags
   pull-requests: write # ...and to open/update that PR
   id-token: write # required by npm publish --provenance (GitHub OIDC)
+  deployments: write # required when using protected environments
 
 concurrency:
   group: release-${{ github.workflow }}-${{ github.ref }}
@@ -18,6 +19,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    environment:
+      name: release # set required reviewers in repo Settings > Environments > release
     # Skip on commits authored by the changesets bot itself or on forks.
     if: |
       github.repository == 'dcheng666666/sketch-map-sdk' &&
