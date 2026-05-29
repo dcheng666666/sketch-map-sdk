@@ -33,7 +33,7 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           # Trusted Publishing (OIDC) requires Node >= 22.14.0
           node-version: 22.14.0
